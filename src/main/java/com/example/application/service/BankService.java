@@ -1,11 +1,13 @@
 package com.example.application.service;
 
 import com.example.application.domain.Account;
+import com.example.application.domain.AccountException;
 import com.github.javafaker.Faker;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,5 +62,20 @@ public class BankService {
 
     public void raise() {
         accounts.forEach(a -> a.setBalance(a.getBalance()*1.1));
+    }
+
+    public void remove1(Long accountId) {
+        if(accountId == null)
+            throw new AccountException("No existing account");
+        boolean found =accounts.removeIf(a -> a.getAccountId().equals(accountId));
+        if(!found)
+            throw new AccountException("Account not found");
+
+    }
+
+    public void add100Eur(Long accountId) {
+        accounts.stream()
+                .filter(a -> a.getAccountId().equals(accountId))
+                .forEach(a -> a.setBalance(a.getBalance()+100));
     }
 }

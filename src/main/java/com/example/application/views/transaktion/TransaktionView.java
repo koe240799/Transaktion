@@ -60,6 +60,12 @@ public class TransaktionView extends VerticalLayout {
         grid.addColumn(a -> a.getActive())
                 .setHeader("Active")
                 .setSortable(true);
+        grid.addComponentColumn(a -> new Button("Delete", e -> remove1(a.getAccountId())))
+                .setHeader("Action")
+                .setSortable(false);
+        grid.addComponentColumn(a -> new Button("Add € 100", e -> add100Eur(a.getAccountId())))
+                .setHeader("Action")
+                .setSortable(false);
 
 
         setSizeFull();
@@ -68,17 +74,35 @@ public class TransaktionView extends VerticalLayout {
         add10Accounts.addClickListener(e -> add10Accounts());
         addWrongAccount.addClickListener(e -> addWrongAccount());
         raiseBalance.addClickListener(e -> raiseBalance());
-        HorizontalLayout buttons = new HorizontalLayout(removeAll, add10Accounts,addWrongAccount,raiseBalance);
+        HorizontalLayout buttons = new HorizontalLayout(removeAll, add10Accounts, addWrongAccount, raiseBalance);
         add(buttons, grid);
         reload();
 
+    }
+
+    private void add100Eur(Long accountId) {
+        try{
+            bankService.add100Eur(accountId);
+            reload();
+        }catch(AccountException e) {
+            Notification.show(e.getMessage());
+        }
+    }
+
+    private void remove1(Long accountId) {
+        try {
+            bankService.remove1(accountId);
+            reload();
+        } catch (AccountException e) {
+            Notification.show(e.getMessage());
+        }
     }
 
     private void raiseBalance() {
         try {
             bankService.raise();
             reload();
-        }catch (AccountException e){
+        } catch (AccountException e) {
             Notification.show(e.getMessage());
         }
     }
@@ -88,7 +112,7 @@ public class TransaktionView extends VerticalLayout {
             Account a = new Account("Fritz", LocalDate.now(), "Savings", -2000.0, true);
             bankService.addAccount(a);
             reload();
-        }catch (AccountException e) {
+        } catch (AccountException e) {
             Notification.show(e.getMessage());
         }
     }
@@ -98,7 +122,7 @@ public class TransaktionView extends VerticalLayout {
             bankService.fillTestData(10);
             removeAll.setEnabled(true);
             reload();
-        }catch (AccountException e) {
+        } catch (AccountException e) {
             Notification.show(e.getMessage());
         }
     }
@@ -108,7 +132,7 @@ public class TransaktionView extends VerticalLayout {
             bankService.removeAllAccounts();
             removeAll.setEnabled(false);
             reload();
-        }catch (AccountException e) {
+        } catch (AccountException e) {
             Notification.show(e.getMessage());
         }
     }
