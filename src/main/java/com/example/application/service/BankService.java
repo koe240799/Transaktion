@@ -14,6 +14,7 @@ public class BankService {
 
     public BankService() {
         accounts = new ArrayList<>();
+        fillTestData(20);
     }
 
     public void fillTestData(int count){
@@ -46,5 +47,18 @@ public class BankService {
         return accounts.stream()
                 .map(s -> s.toString())
                 .collect(Collectors.joining("\n"));
+    }
+
+    public void removeAllAccounts() {
+        accounts.clear();
+    }
+
+
+    public void addAccount(Account a) {
+        accounts.add(a);
+    }
+
+    public void raise() {
+        accounts.forEach(a -> a.setBalance(a.getBalance()*1.1));
     }
 }

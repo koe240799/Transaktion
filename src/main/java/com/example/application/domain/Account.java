@@ -61,9 +61,9 @@ public class Account implements Cloneable {
 
     public void setBalance(Double balance) {
         if(balance.doubleValue() < -1000)
-            throw new AccountException("Balance must be greater than or equal to 1000");
+            throw new AccountException("Balance must be greater than or equal to € 1.000,00");
         if(balance.doubleValue() > 100_000)
-            throw new AccountException("Balance must be less than or equal to 100_000");
+            throw new AccountException("Balance must be less than or equal to € 100.000,00");
         this.balance = balance;
     }
 
